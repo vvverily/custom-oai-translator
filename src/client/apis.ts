@@ -1,5 +1,5 @@
 export default {
-  baseUrl: 'https://api.openai.com',
+  baseUrl: 'http://localhost:11434/v1',
   endpoints: {
     v1: {
       models: {

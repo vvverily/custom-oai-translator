@@ -1,6 +1,6 @@
 {
   "topBar": {
-    "title": "OpenAI Translator",
+    "title": "Custom OAI Translator",
     "darkModeSwitcherTitle": "Switch Dark Mode"
   },
   "navbar": {
@@ -15,14 +15,14 @@
   "Please wait...": "Please wait...",
   "Translated text will appear here.": "Translated text will appear here.",
   "Model (engine)": "Model (engine)",
-  "OpenAI API Key": "OpenAI API Key",
+  "API Key": "API Key",
   "Please enter API Url.": "Please enter API Url.",
   "Please enter your API Key.": "Please enter your API Key.",
   "Please select a model.": "Please select a model.",
   "Config": "Config",
   "Config Saved!": "Config Saved!",
-  "Get your OpenAI API Key": "Get your OpenAI API Key",
-  "Please paste your OpenAI API Key here.": "Please paste your OpenAI API Key here.",
+  "Get your API Key": "Get your API Key",
+  "Please paste your API Key here.": "Please paste your API Key here.",
   "Save": "Save",
   "Cancel": "Cancel",
   "Yes": "Yes",

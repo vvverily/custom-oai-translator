@@ -5,19 +5,19 @@ import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
 
-import OpenAIClient from '@/client';
+import ApiClient from '@/client';
 import { useGlobalStore } from '@/components/GlobalStore';
 
 function ConfigPage() {
   const { t } = useTranslation();
   const {
-    configValues: { openaiApiUrl, openaiApiKey, streamEnabled, currentModel, temperatureParam },
+    configValues: { apiUrl, apiKey, streamEnabled, currentModel, temperatureParam },
     setConfigValues,
   } = useGlobalStore();
-  const openaiApiInputRef = useRef<HTMLInputElement>(null);
+  const apiInputRef = useRef<HTMLInputElement>(null);
 
-  const [inputUrl, setInputUrl] = useState(openaiApiUrl);
-  const [inputKey, setInputKey] = useState(openaiApiKey);
+  const [inputUrl, setInputUrl] = useState(apiUrl);
+  const [inputKey, setInputKey] = useState(apiKey);
   const [debouncedUrl] = useDebouncedValue(inputUrl, 500);
   const [debouncedKey] = useDebouncedValue(inputKey, 500);
 
@@ -27,8 +27,8 @@ function ConfigPage() {
   useEffect(() => {
     if (debouncedUrl && debouncedKey) {
       setIsFetchingModels(true);
-      OpenAIClient.setApiBaseUrl(debouncedUrl);
-      OpenAIClient.fetchModels(debouncedKey)
+      ApiClient.setApiBaseUrl(debouncedUrl);
+      ApiClient.fetchModels(debouncedKey)
         .then((models) => {
           setFetchedModels(models);
           setIsFetchingModels(false);
@@ -47,14 +47,12 @@ function ConfigPage() {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
-      const { openaiApiUrl, openaiApiKey, streamEnabled, selectedModel, temperatureParam } = Object.fromEntries(
-        formData.entries(),
-      );
-      if (!openaiApiUrl) {
+      const { apiUrl, apiKey, streamEnabled, selectedModel, temperatureParam } = Object.fromEntries(formData.entries());
+      if (!apiUrl) {
         toast.error(t('Please enter API Url.'));
         return;
       }
-      if (!openaiApiKey) {
+      if (!apiKey) {
         toast.error(t('Please enter your API Key.'));
         return;
       }
@@ -64,8 +62,8 @@ function ConfigPage() {
       }
       setConfigValues((prev) => ({
         ...prev,
-        openaiApiUrl: `${openaiApiUrl}`,
-        openaiApiKey: `${openaiApiKey}`,
+        apiUrl: `${apiUrl}`,
+        apiKey: `${apiKey}`,
         streamEnabled: streamEnabled === 'on',
         currentModel: selectedModel as string,
         temperatureParam: +temperatureParam,
@@ -75,15 +73,15 @@ function ConfigPage() {
     [setConfigValues, t],
   );
 
-  const handleResetOpenaiApiUrl = useCallback(
+  const handleResetApiUrl = useCallback(
     (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
       event.preventDefault();
-      const inputRef = openaiApiInputRef.current;
+      const inputRef = apiInputRef.current;
       if (!inputRef) {
         return;
       }
-      inputRef.value = 'https://api.openai.com';
-      setInputUrl('https://api.openai.com');
+      inputRef.value = 'http://localhost:11434/v1';
+      setInputUrl('http://localhost:11434/v1');
       inputRef.focus();
       // eslint-disable-next-line quotes
       toast(t("Don't forget to click the save button for the settings to take effect!"));
@@ -133,43 +131,33 @@ function ConfigPage() {
         </div>
         <div className="mb-2 form-control">
           <label className="label">
-            <span className="text-lg font-bold label-text">{t('OpenAI API Url')}</span>
+            <span className="text-lg font-bold label-text">{t('API Url')}</span>
             <span className="label-text-alt">
-              <a className="link link-primary" href="#" onClick={handleResetOpenaiApiUrl}>
+              <a className="link link-primary" href="#" onClick={handleResetApiUrl}>
                 {t('Reset to default')}
               </a>
             </span>
           </label>
           <Input
-            ref={openaiApiInputRef}
-            name="openaiApiUrl"
+            ref={apiInputRef}
+            name="apiUrl"
             color="primary"
             className="break-all"
-            placeholder={t('Please input OpenAI API Url here.')}
-            defaultValue={openaiApiUrl}
+            placeholder={t('Please input API Url here.')}
+            defaultValue={apiUrl}
             onChange={(e) => setInputUrl(e.target.value)}
             required
           />
         </div>
         <div className="mb-2 form-control">
           <label className="label">
-            <span className="text-lg font-bold label-text">{t('OpenAI API Key')}</span>
-            <span className="label-text-alt">
-              <a
-                className="link link-primary"
-                href="https://platform.openai.com/account/api-keys"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                {t('Get your OpenAI API Key')}
-              </a>
-            </span>
+            <span className="text-lg font-bold label-text">{t('API Key')}</span>
           </label>
           <textarea
-            name="openaiApiKey"
+            name="apiKey"
             className="h-24 break-all resize-none rounded-2xl textarea textarea-md textarea-primary"
-            placeholder={t('Please paste your OpenAI API Key here.')}
-            defaultValue={openaiApiKey}
+            placeholder={t('Please paste your API Key here.')}
+            defaultValue={apiKey}
             onChange={(e) => setInputKey(e.target.value)}
             required
           ></textarea>

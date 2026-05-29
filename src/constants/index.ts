@@ -118,8 +118,8 @@ export const LANGUAGES = {
 export type Language = keyof typeof LANGUAGES;
 
 export type ConfigValues = {
-  openaiApiUrl: string;
-  openaiApiKey: string;
+  apiUrl: string;
+  apiKey: string;
   streamEnabled: boolean;
   currentModel: string;
   temperatureParam: number;

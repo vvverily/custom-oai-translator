@@ -18,7 +18,7 @@ function TranslatorPage() {
   const translateTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const {
-    configValues: { openaiApiKey, currentModel, temperatureParam },
+    configValues: { apiKey, currentModel, temperatureParam },
     translator: {
       lastTranslateData,
       setLastTranslateData,
@@ -79,7 +79,7 @@ function TranslatorPage() {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      if (!openaiApiKey) {
+      if (!apiKey) {
         toast.error(t('Please enter your API Key in config page first!'));
         return;
       }
@@ -112,7 +112,7 @@ function TranslatorPage() {
       }));
 
       mutateTranslateText({
-        token: openaiApiKey,
+        token: apiKey,
         engine: currentModel,
         prompt,
         temperatureParam,
@@ -123,7 +123,7 @@ function TranslatorPage() {
       currentModel,
       i18n.language,
       mutateTranslateText,
-      openaiApiKey,
+      apiKey,
       setLastTranslateData,
       setTranslateText,
       t,

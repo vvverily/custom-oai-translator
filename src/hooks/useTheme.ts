@@ -7,7 +7,7 @@ const statusBarColor = {
   dark: '#1E232A',
 } as const;
 
-const localStorageKey = 'openai-translator-theme' as const;
+const localStorageKey = 'custom-oai-translator-theme' as const;
 
 const isSystemInDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 

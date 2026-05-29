@@ -1,6 +1,6 @@
 {
   "topBar": {
-    "title": "OpenAI 翻译器",
+    "title": "Custom OAI 翻译器",
     "darkModeSwitcherTitle": "深色模式切换"
   },
   "navbar": {
@@ -15,14 +15,14 @@
   "Please wait...": "请稍等...",
   "Translated text will appear here.": "翻译结果将会显示在这里。",
   "Model (engine)": "模型 (引擎)",
-  "OpenAI API Key": "OpenAI API Key",
+  "API Key": "API Key",
   "Please enter API Url.": "请输入 API Url。",
   "Please enter your API Key.": "请输入您的 API Key。",
   "Please select a model.": "请选择一个模型。",
   "Config": "设置",
   "Config Saved!": "设置已保存！",
-  "Get your OpenAI API Key": "获取您的 OpenAI API Key",
-  "Please paste your OpenAI API Key here.": "请将您的 OpenAI API Key 粘贴到这里。",
+  "Get your API Key": "获取您的 API Key",
+  "Please paste your API Key here.": "请将您的 API Key 粘贴到这里。",
   "Save": "保存",
   "Cancel": "取消",
   "Yes": "是",

@@ -8,30 +8,17 @@
 
 # Custom OAI Translator
 
-A translator app built using OpenAI GPT model to translate between languages. It is a PWA that can be installed on your phone or desktop.
+A translator app designed for local and custom LLM endpoints. It is a PWA that can be installed on your phone or desktop.
 
-> **Note:** This project has been modified to be aimed purely at people running local models with their own local servers or custom OpenAI-compatible APIs.
+## Key Features
 
-### Custom API & Model Support
-
-This application now supports any OpenAI-compatible API endpoint (e.g., local LLM servers). It automatically detects and fetches available models from the configured `/v1/models` endpoint.
-
-Support models:
-
-- GPT-4o
-- GPT-4o Mini
-- GPT-4 Turbo
-- GPT-4
-- GPT-3.5 Turbo
-- And any custom model provided by your API endpoint
-
-<img width="970" alt="image" src="https://user-images.githubusercontent.com/18505474/222828200-948eef23-bf59-43af-ac27-1484c2bcd406.png">
-
-<img width="1336" alt="image" src="https://user-images.githubusercontent.com/18505474/222924658-012a1089-11f1-474a-99c1-c799aa73d793.png">
+- **Custom API Support**: Connect to any OpenAI-compatible API endpoint (e.g., Ollama, LocalAI, vLLM, etc.).
+- **Automatic Model Detection**: Dynamically fetches and lists available models from your configured API's `/v1/models` endpoint.
+- **PWA Ready**: Installable on mobile and desktop for a native-like experience.
+- **Streaming Support**: Real-time translation feedback.
 
 ## Tech Stack
 
-- OpenAI API
 - React 19
 - Vite 6
 - Tailwind CSS 3
@@ -41,10 +28,6 @@ Support models:
 - React Query 5
 - PWA
 - Cloudflare Pages
-
-I think this project will help you learn these techniques.
-
-If you like this project, please don't forget to give this project a star, thanks.
 
 ## Local Development
 
@@ -83,44 +66,20 @@ Vite should automatically open your browser.
 Navigate to the root directory of your project in your command line interface and run the following command to build the Docker image:
 
 ```bash
-docker build -t openai-translator-web .
+docker build -t custom-oai-translator .
 ```
-
-Here, `openai-translator-web` is the name you want to give to the image, and the `.` at the end indicates the current directory.
 
 #### 2. Start the Container
 
 Run the following command to start the container and map the port to your local machine:
 
 ```bash
-docker run -p 3000:80 openai-translator-web
+docker run -p 3000:80 custom-oai-translator
 ```
-
-Here, 3000 represents the local port you want to map to the container's 80 port. You can change this to any other port you prefer.
-
-#### 3. Open the Application
-
-In your browser, enter the following URL to access the application:
-
-http://localhost:3000/
 
 ### Local Build
 
-#### 1. Install pnpm
-
-Make sure that pnpm is installed on your computer. If it's not already installed, you can install it:
-
-https://pnpm.io/installation
-
-#### 2. Download project dependencies
-
-Navigate to the root directory of your project and run the following command to download project dependencies:
-
-```bash
-pnpm install
-```
-
-#### 3. Build
+#### 1. Build
 
 Run the following command to build your project:
 
@@ -130,7 +89,7 @@ pnpm build
 
 The compiled files will be placed in the `dist` folder.
 
-#### 4. Deploy
+#### 2. Deploy
 
 Now you can treat the files in the `dist` folder as a static website and deploy it on the server.
 

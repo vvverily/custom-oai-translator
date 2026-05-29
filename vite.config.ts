@@ -14,7 +14,7 @@ const pwaOptions: Partial<VitePWAOptions | ManifestOptions> = {
   registerType: 'autoUpdate',
   categories: ['education', 'utilities'],
   description:
-    'A translator app built using OpenAI GPT model to translate between languages. It is a PWA that can be installed on your phone or desktop.',
+    'A translator app designed for local and custom LLM endpoints. It is a PWA that can be installed on your phone or desktop.',
   manifest: {
     short_name: 'Custom OAI Translator',
     name: 'Custom OAI Translator',
@@ -47,7 +47,12 @@ const pwaOptions: Partial<VitePWAOptions | ManifestOptions> = {
     theme_color: '#ffffff',
     background_color: '#ffffff',
   },
-  includeAssets: ['openai-translator-apple-touch-icon.png', 'favicon.png', 'locales/**/*.json', 'icons/*.{png,svg}'],
+  includeAssets: [
+    'custom-oai-translator-apple-touch-icon.png',
+    'favicon.png',
+    'locales/**/*.json',
+    'icons/*.{png,svg}',
+  ],
 };
 
 // https://vitejs.dev/config/
@@ -86,6 +91,11 @@ export default async function ({ command, mode }: ConfigEnv): Promise<UserConfig
     define: {
       BUILD_TIME: JSON.stringify(new Date().toISOString()),
     },
-    assetsInclude: ['favicon.png', 'openai-translator-apple-touch-icon.png', 'locales/**/*.json', 'icons/*.{png,svg}'],
+    assetsInclude: [
+      'favicon.png',
+      'custom-oai-translator-apple-touch-icon.png',
+      'locales/**/*.json',
+      'icons/*.{png,svg}',
+    ],
   };
 }

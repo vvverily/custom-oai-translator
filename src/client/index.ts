@@ -28,7 +28,7 @@ export async function completions(
   token: string,
   prompt: string,
   query: string,
-  model: string = 'text-davinci-003',
+  model: string,
   temperature = 0,
   maxTokens = 1000,
   topP = 1,
@@ -119,7 +119,7 @@ export async function chatCompletionsStream(
     token,
     prompt,
     query,
-    model = 'gpt-4o-mini',
+    model = '',
     temperature = 0,
     maxTokens = 1000,
     topP = 1,
@@ -161,9 +161,11 @@ export async function chatCompletionsStream(
   return response;
 }
 
-export default {
+const ApiClient = {
   setApiBaseUrl,
   fetchModels,
   chatCompletions,
   chatCompletionsStream,
 };
+
+export default ApiClient;

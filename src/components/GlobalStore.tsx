@@ -27,8 +27,8 @@ type GlobalContextValue = {
 
 const context = createContext<GlobalContextValue>({
   configValues: {
-    openaiApiUrl: 'https://api.openai.com',
-    openaiApiKey: '',
+    apiUrl: 'http://localhost:11434/v1',
+    apiKey: '',
     streamEnabled: true,
     currentModel: '',
     temperatureParam: 0.7,
@@ -76,19 +76,19 @@ export function GlobalProvider(props: Props) {
   const [configValues, setConfigValues] = useLocalStorage<ConfigValues>({
     key: 'extra-config',
     defaultValue: {
-      openaiApiUrl: 'https://api.openai.com',
-      openaiApiKey: '',
+      apiUrl: 'http://localhost:11434/v1',
+      apiKey: '',
       streamEnabled: true,
-      currentModel: 'gpt-4o-mini',
+      currentModel: '',
       temperatureParam: 0.7,
     },
     getInitialValueInEffect: false,
   });
   const {
-    openaiApiUrl = 'https://api.openai.com',
-    openaiApiKey = '',
+    apiUrl = 'http://localhost:11434/v1',
+    apiKey = '',
     streamEnabled = true,
-    currentModel = 'gpt-4o-mini',
+    currentModel = '',
     temperatureParam = 0.7,
   } = configValues;
 
@@ -99,7 +99,7 @@ export function GlobalProvider(props: Props) {
     isError: isTranslateError,
   } = useQueryApi(streamEnabled);
 
-  useEffect(() => setApiBaseUrl(configValues.openaiApiUrl), [configValues.openaiApiUrl]);
+  useEffect(() => setApiBaseUrl(configValues.apiUrl), [configValues.apiUrl]);
 
   useEffect(() => {
     if (!translatedText || isTranslating) {
@@ -123,7 +123,7 @@ export function GlobalProvider(props: Props) {
 
   const contextValue = useMemo(
     () => ({
-      configValues: { openaiApiUrl, openaiApiKey, streamEnabled, currentModel, temperatureParam },
+      configValues: { apiUrl, apiKey, streamEnabled, currentModel, temperatureParam },
       setConfigValues,
       translator: {
         lastTranslateData,
@@ -141,8 +141,8 @@ export function GlobalProvider(props: Props) {
       },
     }),
     [
-      openaiApiUrl,
-      openaiApiKey,
+      apiUrl,
+      apiKey,
       streamEnabled,
       currentModel,
       temperatureParam,

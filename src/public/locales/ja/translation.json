@@ -1,6 +1,6 @@
 {
   "topBar": {
-    "title": "OpenAI翻訳機",
+    "title": "Custom OAI 翻訳機",
     "darkModeSwitcherTitle": "暗色モードに切り替える"
   },
   "navbar": {
@@ -15,14 +15,14 @@
   "Please wait...": "お待ちください...",
   "Translated text will appear here.": "翻訳されたテキストがここに表示されます。",
   "Model (engine)": "モデル（エンジン）",
-  "OpenAI API Key": "OpenAI APIキー",
+  "API Key": "APIキー",
   "Please enter API Url.": "API URLを入力してください。",
   "Please enter your API Key.": "APIキーを入力してください。",
   "Please select a model.": "モデルを選択してください。",
   "Config": "設定",
   "Config Saved!": "設定が保存されました！",
-  "Get your OpenAI API Key": "OpenAI APIキーを取得する",
-  "Please paste your OpenAI API Key here.": "OpenAI APIキーをここに貼り付けてください。",
+  "Get your API Key": "APIキーを取得する",
+  "Please paste your API Key here.": "APIキーをここに貼り付けてください。",
   "Save": "保存",
   "Cancel": "キャンセル",
   "Yes": "はい",

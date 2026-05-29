@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import OpenAIClient from '@/client';
+import ApiClient from '@/client';
 
 function getRadomNumber(min: number, max: number) {
   return Math.random() * (max - min) + min;
@@ -34,7 +34,7 @@ export function useChatGPTStream() {
       const tmpParam =
         +temperatureParam > 0.4 && +temperatureParam <= 1.0 ? +temperatureParam : getRadomNumber(0.5, 1.0);
 
-      OpenAIClient.chatCompletionsStream(
+      ApiClient.chatCompletionsStream(
         {
           token,
           prompt,

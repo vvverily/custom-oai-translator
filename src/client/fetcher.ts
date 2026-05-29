@@ -1,4 +1,4 @@
-import OpenAIClient from '@/client';
+import ApiClient from '@/client';
 import { trimText } from '@/utils';
 
 export const fetchTranslation = async (params: {
@@ -22,7 +22,7 @@ export const fetchTranslation = async (params: {
 
   const tmpParam = +temperatureParam > 0.4 && +temperatureParam <= 1.0 ? +temperatureParam : getRadomNumber(0.5, 1.0);
 
-  const resp = await OpenAIClient.chatCompletions(token, prompt, queryText, engine, tmpParam);
+  const resp = await ApiClient.chatCompletions(token, prompt, queryText, engine, tmpParam);
   const text = resp.data.choices
     .map((choice) => choice.message?.content.trim() || '')
     .join('\n')
