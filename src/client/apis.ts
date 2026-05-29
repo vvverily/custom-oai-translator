@@ -2,6 +2,10 @@ export default {
   baseUrl: 'https://api.openai.com',
   endpoints: {
     v1: {
+      models: {
+        url: '/v1/models',
+        method: 'GET',
+      },
       completions: {
         url: '/v1/completions',
         method: 'POST',

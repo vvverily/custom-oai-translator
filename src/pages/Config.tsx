@@ -1,9 +1,11 @@
-import { useCallback, useRef } from 'react';
+import { useDebouncedValue } from '@mantine/hooks';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Input, Toggle } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
 
+import OpenAIClient from '@/client';
 import { useGlobalStore } from '@/components/GlobalStore';
 import { OPENAI_MODELS_TITLES, type OpenAIModel } from '@/constants';
 
@@ -14,6 +16,33 @@ function ConfigPage() {
     setConfigValues,
   } = useGlobalStore();
   const openaiApiInputRef = useRef<HTMLInputElement>(null);
+
+  const [inputUrl, setInputUrl] = useState(openaiApiUrl);
+  const [inputKey, setInputKey] = useState(openaiApiKey);
+  const [debouncedUrl] = useDebouncedValue(inputUrl, 500);
+  const [debouncedKey] = useDebouncedValue(inputKey, 500);
+
+  const [fetchedModels, setFetchedModels] = useState<string[]>([]);
+  const [isFetchingModels, setIsFetchingModels] = useState(false);
+
+  useEffect(() => {
+    if (debouncedUrl && debouncedKey) {
+      setIsFetchingModels(true);
+      OpenAIClient.setApiBaseUrl(debouncedUrl);
+      OpenAIClient.fetchModels(debouncedKey)
+        .then((models) => {
+          setFetchedModels(models);
+          setIsFetchingModels(false);
+        })
+        .catch((err) => {
+          console.error('Failed to fetch models:', err);
+          setFetchedModels([]);
+          setIsFetchingModels(false);
+        });
+    } else {
+      setFetchedModels([]);
+    }
+  }, [debouncedUrl, debouncedKey]);
 
   const handleSave = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
@@ -39,7 +68,7 @@ function ConfigPage() {
         openaiApiUrl: `${openaiApiUrl}`,
         openaiApiKey: `${openaiApiKey}`,
         streamEnabled: streamEnabled === 'on',
-        currentModel: selectedModel as OpenAIModel,
+        currentModel: selectedModel as string,
         temperatureParam: +temperatureParam,
       }));
       toast.success(t('Config Saved!'));
@@ -55,12 +84,33 @@ function ConfigPage() {
         return;
       }
       inputRef.value = 'https://api.openai.com';
+      setInputUrl('https://api.openai.com');
       inputRef.focus();
       // eslint-disable-next-line quotes
       toast(t("Don't forget to click the save button for the settings to take effect!"));
     },
     [t],
   );
+
+  const renderModelOptions = () => {
+    if (fetchedModels.length > 0) {
+      // Ensure the currently selected model is in the list, even if the API didn't return it
+      const modelsToRender = new Set(fetchedModels);
+      if (currentModel && !modelsToRender.has(currentModel)) {
+        modelsToRender.add(currentModel);
+      }
+      return Array.from(modelsToRender).map((model) => (
+        <option key={model} value={model}>
+          {model}
+        </option>
+      ));
+    }
+    return Object.keys(OPENAI_MODELS_TITLES).map((model) => (
+      <option key={model} value={model}>
+        {OPENAI_MODELS_TITLES[model as OpenAIModel]}
+      </option>
+    ));
+  };
 
   return (
     <div className="p-6 w-[28.75rem] max-w-[100vw] bg-base-100 overflow-y-auto overflow-x-hidden h-full">
@@ -97,6 +147,7 @@ function ConfigPage() {
             className="break-all"
             placeholder={t('Please input OpenAI API Url here.')}
             defaultValue={openaiApiUrl}
+            onChange={(e) => setInputUrl(e.target.value)}
             required
           />
         </div>
@@ -119,12 +170,18 @@ function ConfigPage() {
             className="h-24 break-all resize-none rounded-2xl textarea textarea-md textarea-primary"
             placeholder={t('Please paste your OpenAI API Key here.')}
             defaultValue={openaiApiKey}
+            onChange={(e) => setInputKey(e.target.value)}
             required
           ></textarea>
         </div>
         <div className="mb-2 form-control">
           <label className="label">
-            <span className="text-lg font-bold label-text">{t('Model (engine)')}</span>
+            <span className="text-lg font-bold label-text">
+              {t('Model (engine)')}
+              {isFetchingModels && (
+                <span className="ml-2 text-sm font-normal text-gray-500">{t('Fetching models...')}</span>
+              )}
+            </span>
           </label>
           <select
             className="w-full select select-primary"
@@ -132,11 +189,7 @@ function ConfigPage() {
             name="selectedModel"
             title="Selected model"
           >
-            {Object.keys(OPENAI_MODELS_TITLES).map((model) => (
-              <option key={model} value={model}>
-                {OPENAI_MODELS_TITLES[model as OpenAIModel]}
-              </option>
-            ))}
+            {renderModelOptions()}
           </select>
         </div>
         <div className="mb-4 form-control">

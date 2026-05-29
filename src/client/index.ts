@@ -2,21 +2,33 @@ import { fetchEventSource, FetchEventSourceInit } from '@microsoft/fetch-event-s
 import axios from 'axios';
 
 import apis from '@/client/apis';
-import type { ChatModel, OpenAIModel } from '@/constants';
 
 const { endpoints, baseUrl } = apis;
+let currentBaseUrl = baseUrl;
 
 const client = axios.create({ baseURL: baseUrl });
 
 export function setApiBaseUrl(url: string) {
   client.defaults.baseURL = url;
+  currentBaseUrl = url;
+}
+
+export async function fetchModels(token: string) {
+  const { url } = endpoints.v1.models;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await client.get<ModelsResponse>(url, config);
+  return response.data.data.map((model) => model.id);
 }
 
 export async function completions(
   token: string,
   prompt: string,
   query: string,
-  model: Omit<OpenAIModel, ChatModel> = 'text-davinci-003',
+  model: string = 'text-davinci-003',
   temperature = 0,
   maxTokens = 1000,
   topP = 1,
@@ -53,7 +65,7 @@ export async function chatCompletions(
   token: string,
   prompt: string,
   query: string,
-  model: ChatModel = 'gpt-4o-mini',
+  model: string = 'gpt-4o-mini',
   temperature = 0,
   maxTokens = 1000,
   topP = 1,
@@ -81,7 +93,7 @@ export async function chatCompletions(
     presence_penalty: presencePenalty,
     messages: [
       { role: 'system', content: prompt },
-      { role: 'user', content: `"${query}"` },
+      { role: 'user', content: query },
     ],
   };
 
@@ -94,7 +106,7 @@ export async function chatCompletionsStream(
     token: string;
     prompt: string;
     query: string;
-    model?: ChatModel;
+    model?: string;
     temperature?: number;
     maxTokens?: number;
     topP?: number;
@@ -129,12 +141,14 @@ export async function chatCompletionsStream(
     presence_penalty: presencePenalty,
     stream: true,
     messages: [
-      { role: 'system', content: prompt },
-      { role: 'system', content: 'Please note that your response should solely consist of the translation.' },
+      {
+        role: 'system',
+        content: `${prompt}\nPlease note that your response should solely consist of the translation.`,
+      },
       { role: 'user', content: query },
     ],
   };
-  const response = await fetchEventSource(baseUrl + url, {
+  const response = await fetchEventSource(currentBaseUrl + url, {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
@@ -149,6 +163,7 @@ export async function chatCompletionsStream(
 
 export default {
   setApiBaseUrl,
+  fetchModels,
   completions,
   chatCompletions,
   chatCompletionsStream,

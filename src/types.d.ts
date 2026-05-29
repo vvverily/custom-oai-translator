@@ -45,6 +45,16 @@ type ChatCompletionsResponse = {
   }[];
 };
 
+type ModelsResponse = {
+  object: string;
+  data: {
+    id: string;
+    object: string;
+    created: number;
+    owned_by: string;
+  }[];
+};
+
 type HistoryRecord = {
   id: string;
   text: string;

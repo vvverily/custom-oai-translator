@@ -1,10 +1,10 @@
 import OpenAIClient from '@/client';
-import { CHAT_MODELS, type ChatModel, type OpenAIModel } from '@/constants';
+import { COMPLETIONS_MODELS } from '@/constants';
 import { trimText } from '@/utils';
 
 export const fetchTranslation = async (params: {
   token: string;
-  engine: OpenAIModel;
+  engine: string;
   prompt: string;
   temperatureParam: number;
   queryText: string;
@@ -21,12 +21,12 @@ export const fetchTranslation = async (params: {
     return Math.random() * (max - min) + min;
   };
 
-  const isChatModel = (CHAT_MODELS as string[]).includes(engine);
+  const isChatModel = !(COMPLETIONS_MODELS as string[]).includes(engine);
 
   const tmpParam = +temperatureParam > 0.4 && +temperatureParam <= 1.0 ? +temperatureParam : getRadomNumber(0.5, 1.0);
 
   if (isChatModel) {
-    const resp = await OpenAIClient.chatCompletions(token, prompt, queryText, engine as ChatModel, tmpParam);
+    const resp = await OpenAIClient.chatCompletions(token, prompt, queryText, engine, tmpParam);
     const text = resp.data.choices
       .map((choice) => choice.message?.content.trim() || '')
       .join('\n')

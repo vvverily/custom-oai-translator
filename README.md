@@ -12,6 +12,10 @@ A translator app built using OpenAI GPT model to translate between languages. It
 
 https://translator.lance.moe/
 
+### Custom API & Model Support
+
+This application now supports any OpenAI-compatible API endpoint (e.g., local LLM servers). It automatically detects and fetches available models from the configured `/v1/models` endpoint.
+
 Support models:
 
 - GPT-4o
@@ -19,7 +23,7 @@ Support models:
 - GPT-4 Turbo
 - GPT-4
 - GPT-3.5 Turbo
-- And other OpenAI LLM models
+- And any custom model provided by your API endpoint
 
 <img width="970" alt="image" src="https://user-images.githubusercontent.com/18505474/222828200-948eef23-bf59-43af-ac27-1484c2bcd406.png">
 
