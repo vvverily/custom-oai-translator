@@ -12,7 +12,6 @@ RUN pnpm build
 
 
 FROM nginx
-LABEL maintainer="admin@lance.moe"
 
 ENV NODE_ENV=production
 COPY --from=builder /app/dist /usr/share/nginx/html

@@ -1,5 +1,5 @@
 {
-  "name": "openai-translator-web",
+  "name": "custom-oai-translator",
   "private": false,
   "version": "0.3.0",
   "type": "module",

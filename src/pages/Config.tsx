@@ -7,7 +7,6 @@ import { FaTimes } from 'react-icons/fa';
 
 import OpenAIClient from '@/client';
 import { useGlobalStore } from '@/components/GlobalStore';
-import { OPENAI_MODELS_TITLES, type OpenAIModel } from '@/constants';
 
 function ConfigPage() {
   const { t } = useTranslation();
@@ -93,21 +92,22 @@ function ConfigPage() {
   );
 
   const renderModelOptions = () => {
-    if (fetchedModels.length > 0) {
-      // Ensure the currently selected model is in the list, even if the API didn't return it
-      const modelsToRender = new Set(fetchedModels);
-      if (currentModel && !modelsToRender.has(currentModel)) {
-        modelsToRender.add(currentModel);
-      }
-      return Array.from(modelsToRender).map((model) => (
-        <option key={model} value={model}>
-          {model}
-        </option>
-      ));
+    const modelsToRender = new Set(fetchedModels);
+    if (currentModel && !modelsToRender.has(currentModel)) {
+      modelsToRender.add(currentModel);
     }
-    return Object.keys(OPENAI_MODELS_TITLES).map((model) => (
+
+    if (modelsToRender.size === 0) {
+      return (
+        <option value="" disabled>
+          {t('Please enter API Key and Url to fetch models')}
+        </option>
+      );
+    }
+
+    return Array.from(modelsToRender).map((model) => (
       <option key={model} value={model}>
-        {OPENAI_MODELS_TITLES[model as OpenAIModel]}
+        {model}
       </option>
     ));
   };

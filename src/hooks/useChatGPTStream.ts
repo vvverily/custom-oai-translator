@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 
 import OpenAIClient from '@/client';
-import { COMPLETIONS_MODELS } from '@/constants';
 
 function getRadomNumber(min: number, max: number) {
   return Math.random() * (max - min) + min;
@@ -35,14 +34,12 @@ export function useChatGPTStream() {
       const tmpParam =
         +temperatureParam > 0.4 && +temperatureParam <= 1.0 ? +temperatureParam : getRadomNumber(0.5, 1.0);
 
-      const isChatModel = !(COMPLETIONS_MODELS as string[]).includes(engine);
-
       OpenAIClient.chatCompletionsStream(
         {
           token,
           prompt,
           query: queryText,
-          model: isChatModel ? engine : 'gpt-4o-mini',
+          model: engine,
           temperature: tmpParam,
         },
         {

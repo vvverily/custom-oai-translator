@@ -65,7 +65,7 @@ export async function chatCompletions(
   token: string,
   prompt: string,
   query: string,
-  model: string = 'gpt-4o-mini',
+  model: string,
   temperature = 0,
   maxTokens = 1000,
   topP = 1,
@@ -164,7 +164,6 @@ export async function chatCompletionsStream(
 export default {
   setApiBaseUrl,
   fetchModels,
-  completions,
   chatCompletions,
   chatCompletionsStream,
 };

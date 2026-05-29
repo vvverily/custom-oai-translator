@@ -30,7 +30,7 @@ const context = createContext<GlobalContextValue>({
     openaiApiUrl: 'https://api.openai.com',
     openaiApiKey: '',
     streamEnabled: true,
-    currentModel: 'gpt-4o-mini',
+    currentModel: '',
     temperatureParam: 0.7,
   },
   setConfigValues: () => undefined,

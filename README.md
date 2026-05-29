@@ -6,11 +6,11 @@
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 ![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)
 
-# OpenAI Translator
+# Custom OAI Translator
 
 A translator app built using OpenAI GPT model to translate between languages. It is a PWA that can be installed on your phone or desktop.
 
-https://translator.lance.moe/
+> **Note:** This project has been modified to be aimed purely at people running local models with their own local servers or custom OpenAI-compatible APIs.
 
 ### Custom API & Model Support
 
@@ -136,4 +136,5 @@ Now you can treat the files in the `dist` folder as a static website and deploy 
 
 ## Credit
 
+- Original project by [LanceMoe/openai-translator](https://github.com/LanceMoe/openai-translator)
 - Inspired by https://github.com/yetone/bob-plugin-openai-translator

@@ -16,8 +16,8 @@ const pwaOptions: Partial<VitePWAOptions | ManifestOptions> = {
   description:
     'A translator app built using OpenAI GPT model to translate between languages. It is a PWA that can be installed on your phone or desktop.',
   manifest: {
-    short_name: 'OpenAI Translator',
-    name: 'OpenAI Translator',
+    short_name: 'Custom OAI Translator',
+    name: 'Custom OAI Translator',
     display: 'standalone',
     icons: [
       {
