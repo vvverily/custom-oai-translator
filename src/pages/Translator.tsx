@@ -1,3 +1,4 @@
+import { useDebouncedValue } from '@mantine/hooks';
 import clsx from 'clsx';
 import { useCallback, useEffect, useRef } from 'react';
 import { Button } from 'react-daisyui';
@@ -75,24 +76,19 @@ function TranslatorPage() {
     [setTranslateText],
   );
 
-  const handleTranslate = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-
+  const executeTranslation = useCallback(
+    (textToTranslate: string) => {
       if (!apiKey) {
         toast.error(t('Please enter your API Key in config page first!'));
         return;
       }
 
-      const formData = new FormData(event.currentTarget);
-      const { translateText, fromLang, toLang } = Object.fromEntries(formData.entries());
-      if (!translateText || !fromLang || !toLang) {
+      if (!textToTranslate || !lastTranslateData.fromLang || !lastTranslateData.toLang) {
         return;
       }
 
-      setTranslateText(translateText as string);
-
       let prompt: string;
+      const { fromLang, toLang } = lastTranslateData;
 
       if (toLang === 'auto') {
         if (i18n.language.startsWith('zh')) {
@@ -105,38 +101,55 @@ function TranslatorPage() {
         prompt = getTranslatePrompt(fromLang as Language, toLang as Language);
       }
 
-      setLastTranslateData((prev) => ({
-        ...prev,
-        fromLang: fromLang as Language,
-        toLang: toLang as Language,
-      }));
-
       mutateTranslateText({
         token: apiKey,
         engine: currentModel,
         prompt,
         temperatureParam,
-        queryText: translateText as string,
+        queryText: textToTranslate,
       });
     },
-    [
-      currentModel,
-      i18n.language,
-      mutateTranslateText,
-      apiKey,
-      setLastTranslateData,
-      setTranslateText,
-      t,
-      temperatureParam,
-    ],
+    [apiKey, currentModel, i18n.language, lastTranslateData, mutateTranslateText, t, temperatureParam],
   );
+
+  const lastAutoTranslatedTextRef = useRef<string>('');
+
+  const handleTranslate = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      executeTranslation(translateText);
+      lastAutoTranslatedTextRef.current = translateText;
+    },
+    [executeTranslation, translateText],
+  );
+
+  const [debouncedTranslateText] = useDebouncedValue(translateText, 2000);
+  const [debouncedTranslateData] = useDebouncedValue(lastTranslateData, 2000);
+
+  const lastAutoTranslatedDataRef = useRef<LastTranslateData>(lastTranslateData);
+
+  useEffect(() => {
+    const isTextChanged = debouncedTranslateText && debouncedTranslateText !== lastAutoTranslatedTextRef.current;
+    const isDataChanged =
+      debouncedTranslateText &&
+      (debouncedTranslateData.fromLang !== lastAutoTranslatedDataRef.current.fromLang ||
+        debouncedTranslateData.toLang !== lastAutoTranslatedDataRef.current.toLang);
+
+    if (isTextChanged || isDataChanged) {
+      executeTranslation(debouncedTranslateText);
+      lastAutoTranslatedTextRef.current = debouncedTranslateText;
+      lastAutoTranslatedDataRef.current = debouncedTranslateData;
+    }
+  }, [debouncedTranslateText, debouncedTranslateData, executeTranslation]);
 
   const onClearBtnClick = useCallback(() => {
     if (!translateTextAreaRef.current) {
       return;
     }
     translateTextAreaRef.current.value = '';
-  }, []);
+    setTranslateText('');
+    lastAutoTranslatedTextRef.current = '';
+  }, [setTranslateText]);
 
   // ↑ Hooks before, keep hooks order
 

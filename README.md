@@ -9,6 +9,7 @@
 # Custom OAI Translator
 
 A translator app designed for local and custom LLM endpoints. It is a PWA that can be installed on your phone or desktop.
+Note: Changes made from original repo are done by AI.
 
 ## Key Features
 
